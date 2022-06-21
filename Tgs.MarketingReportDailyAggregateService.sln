@@ -11,6 +11,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReportDailyAggregate.Repositories", "Tgs.MarketingReportDailyAggregate.Repositories\Tgs.MarketingReportDailyAggregate.Repositories.csproj", "{77FA4A51-5703-4705-806F-5B941E672A9E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReportDailyAggregate.Core", "Tgs.MarketingReportDailyAggregate.Core\Tgs.MarketingReportDailyAggregate.Core.csproj", "{6B2869E3-3ECC-4F39-A923-FEC39A784AEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReportDailyAggregate.Core.UnitTests", "Tgs.MarketingReportDailyAggregate.Core.UnitTests\Tgs.MarketingReportDailyAggregate.Core.UnitTests.csproj", "{D53D282D-9CA9-4C20-B32A-3FD3B7669220}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{1FDD4C11-0686-4CFE-9452-582D12FA6647}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FDD4C11-0686-4CFE-9452-582D12FA6647}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FDD4C11-0686-4CFE-9452-582D12FA6647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77FA4A51-5703-4705-806F-5B941E672A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77FA4A51-5703-4705-806F-5B941E672A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77FA4A51-5703-4705-806F-5B941E672A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77FA4A51-5703-4705-806F-5B941E672A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B2869E3-3ECC-4F39-A923-FEC39A784AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B2869E3-3ECC-4F39-A923-FEC39A784AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B2869E3-3ECC-4F39-A923-FEC39A784AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B2869E3-3ECC-4F39-A923-FEC39A784AEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53D282D-9CA9-4C20-B32A-3FD3B7669220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53D282D-9CA9-4C20-B32A-3FD3B7669220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53D282D-9CA9-4C20-B32A-3FD3B7669220}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53D282D-9CA9-4C20-B32A-3FD3B7669220}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
