@@ -3,6 +3,7 @@
     "Tgs.MarketingReportDailyAggregateService": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "healthz",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

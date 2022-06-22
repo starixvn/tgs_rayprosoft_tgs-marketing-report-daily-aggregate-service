@@ -24,8 +24,8 @@ internal class GenerateDailyAggregateReportCommandService : ICommandService<Gene
             : GetDateTimeOffsetOfEightHourTimezone(command.EndDate);
 
         return _tgsRepository.GenerateDailyAggregateReportAsync(
-            startTime.ToUniversalTime().DateTime,
-            endTime.ToUniversalTime().DateTime,
+            startTime.DateTime.ToUniversalTime(),
+            endTime.DateTime.ToUniversalTime(),
             cancellationToken);
     }
 
