@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NSubstitute;
-using Tgs.MarketingReportDailyAggregate.Core;
+﻿using NSubstitute;
 using Tgs.MarketingReportDailyAggregate.Core.ApplicationServices;
 
-namespace Tgs.MarketingReportDailyAggregateService.Core.UnitTests;
+namespace Tgs.MarketingReportDailyAggregate.Core.UnitTests;
 
 internal class GenerateDailyAggregateReportCommandServiceUnitTests
 {
