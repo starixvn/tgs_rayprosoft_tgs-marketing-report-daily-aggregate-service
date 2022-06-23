@@ -22,63 +22,63 @@ internal class TgsRepository : ITgsRepository
         CancellationToken cancellationToken = default)
     {
         var sql = @"
-with register As (
-	select
-		agent_id,
-		to_char(registered_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD') as report_date,
-		Count(1) as register_count
-	from
-		dbo.players
-	where
-		agent_id is not null
-		and registered_on >= :start_time
-		and registered_on < :end_time
-	group by
-		agent_id,
-		to_char(registered_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
-),
-deposit As (
-	select
-		agent_id,
-		to_char(first_deposit_on  at time zone 'Asia/Shanghai', 'YYYY-MM-DD') as report_date,
-		Count(1) as first_deposit_count
-	from
-		dbo.players
-	where
-		agent_id is not null
-		and first_deposit_on >= :start_time
-		and first_deposit_on < :end_time
-	group by
-		agent_id,
-		to_char(first_deposit_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
-),
-gaming As (
-	select
-		agent_id ,
-		to_char(report_date at time zone 'Asia/Shanghai', 'YYYY-MM-DD') as report_date,
-		count(1) as gaming_count
-	from report.player_aggregates ra
-	where
-		agent_id is not null
-		and report_date >= :start_time
-		and report_date < :end_time
-	group by
-		agent_id ,
-		to_char(report_date at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
-)
-insert into report.marketing_report_daily_aggregates(agent_id, report_date, register_count, first_deposit_count, gaming_count)
-select
-	distinct
-	coalesce(r.agent_id, d.agent_id, g.agent_id) as agent_id,
-	to_date(coalesce(r.report_date, d.report_date, g.report_date), 'YYYY-MM-DD')  as report_date,
-	coalesce(r.register_count, 0) as register_count,
-	coalesce(d.first_deposit_count, 0) as first_deposit_count,
-	coalesce(g.gaming_count, 0) as gaming_count
-from register r
-full join deposit d on r.agent_id = d.agent_id and r.report_date = d.report_date
-full join gaming g on r.agent_id = g.agent_id and r.report_date = g.report_date
-on conflict (agent_id, report_date) do nothing
-";
+                WITH register AS (
+	                SELECT
+		                agent_id,
+		                to_char(registered_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD') AS report_date,
+		                COUNT(1) AS register_count
+	                FROM
+		                dbo.players
+	                WHERE
+		                agent_id IS NOT NULL
+		                and registered_on >= :start_time
+		                and registered_on < :end_time
+	                GROUP BY
+		                agent_id,
+		                to_char(registered_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
+                ),
+                deposit AS (
+	                SELECT
+		                agent_id,
+		                to_char(first_deposit_on  at time zone 'Asia/Shanghai', 'YYYY-MM-DD') AS report_date,
+		                COUNT(1) AS first_deposit_count
+	                FROM
+		                dbo.players
+	                WHERE
+		                agent_id IS NOT NULL
+		                and first_deposit_on >= :start_time
+		                and first_deposit_on < :end_time
+	                GROUP BY
+		                agent_id,
+		                to_char(first_deposit_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
+                ),
+                gaming AS (
+	                SELECT
+		                agent_id ,
+		                to_char(report_date at time zone 'Asia/Shanghai', 'YYYY-MM-DD') AS report_date,
+		                COUNT(1) AS gaming_count
+	                FROM report.player_aggregates ra
+	                WHERE
+		                agent_id IS NOT NULL
+		                and report_date >= :start_time
+		                and report_date < :end_time
+	                GROUP BY
+		                agent_id ,
+		                to_char(report_date at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
+                )
+                INSERT INTO report.marketing_report_daily_aggregates(agent_id, report_date, register_count, first_deposit_count, gaming_count)
+                SELECT
+	                DISTINCT
+	                COALESCE(r.agent_id, d.agent_id, g.agent_id) AS agent_id,
+	                to_date(COALESCE(r.report_date, d.report_date, g.report_date), 'YYYY-MM-DD') AS report_date,
+	                COALESCE(r.register_count, 0) AS register_count,
+	                COALESCE(d.first_deposit_count, 0) AS first_deposit_count,
+	                COALESCE(g.gaming_count, 0) AS gaming_count
+                FROM register AS r
+                FULL JOIN deposit d ON r.agent_id = d.agent_id AND r.report_date = d.report_date
+                FULL JOIN gaming g ON r.agent_id = g.agent_id AND r.report_date = g.report_date
+                ON CONFLICT (agent_id, report_date) DO NOTHING
+                ";
 
         var parameters = new NpgsqlParameter[]
         {
