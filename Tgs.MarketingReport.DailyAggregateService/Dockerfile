@@ -9,19 +9,19 @@ ARG BuildConfiguration=Release
 RUN --mount=type=secret,id=nuget,dst=/pat cp /pat ~/.nuget/NuGet/NuGet.Config
 WORKDIR /src
 COPY ["nuget.config", "."]
-COPY ["Tgs.MarketingReport.DailyAggregateService/Tgs.Marketing.ReportDailyAggregateService.csproj", "Tgs.MarketingReport.DailyAggregateService/"]
+COPY ["Tgs.MarketingReport.DailyAggregateService/Tgs.MarketingReport.DailyAggregateService.csproj", "Tgs.MarketingReport.DailyAggregateService/"]
 COPY ["Tgs.MarketingReport.DailyAggregate.Repositories/Tgs.MarketingReport.DailyAggregate.Repositories.csproj", "Tgs.MarketingReport.DailyAggregate.Repositories/"]
 COPY ["Tgs.MarketingReport.DailyAggregate.Core/Tgs.MarketingReport.DailyAggregate.Core.csproj", "Tgs.MarketingReport.DailyAggregate.Core/"]
-RUN dotnet restore "Tgs.MarketingReport.DailyAggregateService/Tgs.Marketing.ReportDailyAggregateService.csproj"
+RUN dotnet restore "Tgs.MarketingReport.DailyAggregateService/Tgs.MarketingReport.DailyAggregateService.csproj"
 COPY . .
 WORKDIR "/src/Tgs.MarketingReport.DailyAggregateService"
-RUN dotnet build "Tgs.Marketing.ReportDailyAggregateService.csproj" -c $BuildConfiguration -o /app/build
+RUN dotnet build "Tgs.MarketingReport.DailyAggregateService.csproj" -c $BuildConfiguration -o /app/build
 
 FROM build AS publish
 ARG BuildConfiguration
-RUN dotnet publish "Tgs.Marketing.ReportDailyAggregateService.csproj" -c $BuildConfiguration -o /app/publish
+RUN dotnet publish "Tgs.MarketingReport.DailyAggregateService.csproj" -c $BuildConfiguration -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Tgs.Marketing.ReportDailyAggregateService.dll"]
+ENTRYPOINT ["dotnet", "Tgs.MarketingReport.DailyAggregateService.dll"]

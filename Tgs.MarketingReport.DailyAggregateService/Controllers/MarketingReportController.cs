@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tgs.ServiceUtility;
-using Tgs.Marketing.ReportDailyAggregateService.ViewModels;
 using Tgs.MarketingReport.DailyAggregate.Core.ApplicationServices;
+using Tgs.MarketingReport.DailyAggregateService.ViewModels;
+using Tgs.ServiceUtility;
 
-namespace Tgs.Marketing.ReportDailyAggregateService.Controllers;
+namespace Tgs.MarketingReport.DailyAggregateService.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class MarketingReportController : ControllerBase
 {
