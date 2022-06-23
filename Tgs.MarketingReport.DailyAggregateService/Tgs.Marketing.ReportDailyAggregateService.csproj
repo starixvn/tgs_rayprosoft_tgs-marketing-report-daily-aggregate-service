@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>d5e7f51b-483e-4aa8-9b50-bf16881b6aeb</UserSecretsId>
+    <DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)"</DockerfileBuildArguments>
+    <DockerfileTag Condition="$(DockerfileTag) == ''">marketing-report-daily-aggregate</DockerfileTag>
   </PropertyGroup>
 
   <ItemGroup>
