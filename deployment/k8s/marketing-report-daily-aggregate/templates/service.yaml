@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "marketing-report-daily-aggregate.fullname" . }}
+  labels:
+    {{- include "marketing-report-daily-aggregate.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "marketing-report-daily-aggregate.selectorLabels" . | nindent 4 }}
