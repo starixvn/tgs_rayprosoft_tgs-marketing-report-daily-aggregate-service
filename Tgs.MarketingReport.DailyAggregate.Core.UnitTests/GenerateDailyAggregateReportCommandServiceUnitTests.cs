@@ -1,7 +1,8 @@
 ﻿using NSubstitute;
-using Tgs.MarketingReportDailyAggregate.Core.ApplicationServices;
+using Tgs.MarketingReport.DailyAggregate.Core.ApplicationServices;
+using Tgs.MarketingReport.DailyAggregate.Core;
 
-namespace Tgs.MarketingReportDailyAggregate.Core.UnitTests;
+namespace Tgs.MarketingReport.DailyAggregate.Core.UnitTests;
 
 internal class GenerateDailyAggregateReportCommandServiceUnitTests
 {

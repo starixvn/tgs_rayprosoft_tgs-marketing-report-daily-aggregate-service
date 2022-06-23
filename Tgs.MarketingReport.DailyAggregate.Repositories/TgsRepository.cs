@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
-using Tgs.MarketingReportDailyAggregate.Core;
-using Tgs.MarketingReportDailyAggregate.Repositories.Entities;
+using Tgs.MarketingReport.DailyAggregate.Repositories.Entities;
+using Tgs.MarketingReport.DailyAggregate.Core;
 
-namespace Tgs.MarketingReportDailyAggregate.Repositories;
+namespace Tgs.MarketingReport.DailyAggregate.Repositories;
 
 internal class TgsRepository : ITgsRepository
 {

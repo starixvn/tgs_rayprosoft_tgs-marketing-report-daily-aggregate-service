@@ -1,6 +1,7 @@
 ﻿using Tgs.ServiceUtility;
+using Tgs.MarketingReport.DailyAggregate.Core.ApplicationServices;
 
-namespace Tgs.MarketingReportDailyAggregate.Core.ApplicationServices;
+namespace Tgs.MarketingReport.DailyAggregate.Core.ApplicationServices;
 
 internal class GenerateDailyAggregateReportCommandService : ICommandService<GenerateDailyAggregateReportCommand>
 {

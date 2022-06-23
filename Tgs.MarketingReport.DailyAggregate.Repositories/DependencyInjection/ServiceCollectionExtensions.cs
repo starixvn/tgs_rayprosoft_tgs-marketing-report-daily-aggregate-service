@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Tgs.MarketingReportDailyAggregate.Core;
-using Tgs.MarketingReportDailyAggregate.Repositories;
-using Tgs.MarketingReportDailyAggregate.Repositories.Entities;
+using Tgs.MarketingReport.DailyAggregate.Core;
+using Tgs.MarketingReport.DailyAggregate.Repositories;
+using Tgs.MarketingReport.DailyAggregate.Repositories.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

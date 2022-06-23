@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
-using Tgs.MarketingReportDailyAggregate.Repositories.Entities;
+using Tgs.MarketingReport.DailyAggregate.Repositories.Entities;
 
 #nullable disable
 
-namespace Tgs.MarketingReportDailyAggregate.Repositories.Entities.Configurations
+namespace Tgs.MarketingReport.DailyAggregate.Repositories.Entities.Configurations
 {
     public partial class MarketingReportDailyAggregateConfiguration : IEntityTypeConfiguration<MarketingReportDailyAggregate>
     {

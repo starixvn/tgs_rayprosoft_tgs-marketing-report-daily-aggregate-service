@@ -1,4 +1,4 @@
-﻿namespace Tgs.MarketingReportDailyAggregate.Core;
+﻿namespace Tgs.MarketingReport.DailyAggregate.Core;
 
 public interface ITgsRepository
 {

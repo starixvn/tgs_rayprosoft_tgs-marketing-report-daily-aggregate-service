@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Tgs.MarketingReportDailyAggregate.Repositories.Entities
+namespace Tgs.MarketingReport.DailyAggregate.Repositories.Entities
 {
     public partial class MarketingReportDailyAggregate
     {

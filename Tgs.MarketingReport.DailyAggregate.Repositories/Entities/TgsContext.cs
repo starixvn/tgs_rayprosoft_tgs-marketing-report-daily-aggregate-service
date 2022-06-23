@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
-using Tgs.MarketingReportDailyAggregate.Repositories.Entities.Configurations;
+using Tgs.MarketingReport.DailyAggregate.Repositories.Entities.Configurations;
 #nullable enable
 
-namespace Tgs.MarketingReportDailyAggregate.Repositories.Entities
+namespace Tgs.MarketingReport.DailyAggregate.Repositories.Entities
 {
     public partial class TgsContext : DbContext
     {

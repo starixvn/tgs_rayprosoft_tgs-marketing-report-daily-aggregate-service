@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tgs.MarketingReportDailyAggregate.Core\Tgs.MarketingReportDailyAggregate.Core.csproj" />
-    <ProjectReference Include="..\Tgs.MarketingReportDailyAggregate.Repositories\Tgs.MarketingReportDailyAggregate.Repositories.csproj" />
+    <ProjectReference Include="..\Tgs.MarketingReport.DailyAggregate.Core\Tgs.MarketingReport.DailyAggregate.Core.csproj" />
+    <ProjectReference Include="..\Tgs.MarketingReport.DailyAggregate.Repositories\Tgs.MarketingReport.DailyAggregate.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@
    "ModelNamespace": "Entities",
    "OutputContextPath": "Entities",
    "OutputPath": "Entities\\Models",
-   "ProjectRootNamespace": "Tgs.MarketingReportDailyAggregate.Repositories",
+   "ProjectRootNamespace": "Tgs.MarketingReport.DailyAggregate.Repositories",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,
