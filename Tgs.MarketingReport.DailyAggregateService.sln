@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32519.379
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2B83AA19-081F-4EC6-918B-E738D62DCED4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAggregate.Core", "Tgs.MarketingReport.DailyAggregate.Core\Tgs.MarketingReport.DailyAggregate.Core.csproj", "{0C77AED3-6367-4312-9781-FAFC62B10BFE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAggregate.Repositories", "Tgs.MarketingReport.DailyAggregate.Repositories\Tgs.MarketingReport.DailyAggregate.Repositories.csproj", "{F988BC27-4672-4193-8092-0C4C9B97BB9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAggregate.Core.UnitTests", "Tgs.MarketingReport.DailyAggregate.Core.UnitTests\Tgs.MarketingReport.DailyAggregate.Core.UnitTests.csproj", "{F70708AA-9191-4220-A539-A1C4BC5673BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAggregateService", "Tgs.MarketingReport.DailyAggregateService\Tgs.MarketingReport.DailyAggregateService.csproj", "{93203975-DF15-45DC-9337-2DD8E084B9B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAggregate.IntegrationTests", "Tgs.MarketingReport.DailyAggregate.IntegrationTests\Tgs.MarketingReport.DailyAggregate.IntegrationTests.csproj", "{3F2988F6-48E0-4AAC-8F30-382057B7738C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAggregate.Client", "Tgs.MarketingReport.DailyAggregate.Client\Tgs.MarketingReport.DailyAggregate.Client.csproj", "{D69E0736-0D2A-4D36-954B-4C3265E8710E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C77AED3-6367-4312-9781-FAFC62B10BFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C77AED3-6367-4312-9781-FAFC62B10BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C77AED3-6367-4312-9781-FAFC62B10BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C77AED3-6367-4312-9781-FAFC62B10BFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F988BC27-4672-4193-8092-0C4C9B97BB9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F988BC27-4672-4193-8092-0C4C9B97BB9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F988BC27-4672-4193-8092-0C4C9B97BB9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F988BC27-4672-4193-8092-0C4C9B97BB9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F70708AA-9191-4220-A539-A1C4BC5673BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F70708AA-9191-4220-A539-A1C4BC5673BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F70708AA-9191-4220-A539-A1C4BC5673BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F70708AA-9191-4220-A539-A1C4BC5673BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93203975-DF15-45DC-9337-2DD8E084B9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93203975-DF15-45DC-9337-2DD8E084B9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93203975-DF15-45DC-9337-2DD8E084B9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93203975-DF15-45DC-9337-2DD8E084B9B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F2988F6-48E0-4AAC-8F30-382057B7738C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F2988F6-48E0-4AAC-8F30-382057B7738C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F2988F6-48E0-4AAC-8F30-382057B7738C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F2988F6-48E0-4AAC-8F30-382057B7738C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D69E0736-0D2A-4D36-954B-4C3265E8710E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D69E0736-0D2A-4D36-954B-4C3265E8710E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D69E0736-0D2A-4D36-954B-4C3265E8710E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D69E0736-0D2A-4D36-954B-4C3265E8710E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6853ED85-A716-4484-A419-CBB763E27CD5}
+	EndGlobalSection
+EndGlobal
