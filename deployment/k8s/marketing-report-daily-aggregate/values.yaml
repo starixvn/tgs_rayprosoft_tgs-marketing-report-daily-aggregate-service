@@ -12,12 +12,12 @@ image:
 
 imagePullSecrets: 
   - name: secret-tgs-harbor
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: "marketing-report-daily-aggregate"
+fullnameOverride: "marketing-report-daily-aggregate"
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
