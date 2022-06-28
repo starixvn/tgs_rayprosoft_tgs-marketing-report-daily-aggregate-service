@@ -6,7 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <UserSecretsId>d5e7f51b-483e-4aa8-9b50-bf16881b6aeb</UserSecretsId>
-    <DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)"</DockerfileBuildArguments>
+    <GlobalNugetConfig>$(UserProfile)\AppData\Roaming\NuGet\NuGet.Config</GlobalNugetConfig>
+    <GlobalNugetConfig Condition="'$(UserProfile)'==''">$(HOME)/.nuget/NuGet/NuGet.Config</GlobalNugetConfig>
+    <DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)" --secret id=nuget,src="$(GlobalNugetConfig)"</DockerfileBuildArguments>
     <DockerfileTag Condition="$(DockerfileTag) == ''">marketing-report-daily-aggregate</DockerfileTag>
   </PropertyGroup>
 

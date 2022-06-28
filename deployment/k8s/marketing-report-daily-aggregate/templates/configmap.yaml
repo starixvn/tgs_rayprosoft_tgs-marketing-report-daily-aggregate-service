@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: configmap-{{ include "marketing-report-daily-aggregate.fullname" . }}
 data:
-  appsetting.json: | 
+  appsettings.json: | 
     {
     }
   monitor.settings.json: |
