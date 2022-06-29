@@ -7,7 +7,23 @@ namespace Tgs.MarketingReport.DailyAggregate.IntegrationTests;
 public class MarketingReportTests
 {
     [Test]
-    public async Task Generate_Daily_Aggregate_Report()
+    public async Task Generate_Daily_Aggregate_Report_By_Daily()
+    {
+        await using var web = new TestMarketingReportDailyAggregateServiceApplication(builder =>
+        {
+            _ = builder.ConfigureServices(services =>
+                services.AddTransient<ITgsRepository, StubTgsRepository>());
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new MarketingReportDailyAggregateClient(httpClient);
+
+        await sut.GenerateMarkingDailyAggregateReportByDailyAsync();
+    }
+
+    [Test]
+    public async Task Generate_Daily_Aggregate_Report_By_Date_Range()
     {
         await using var web = new TestMarketingReportDailyAggregateServiceApplication(builder =>
         {

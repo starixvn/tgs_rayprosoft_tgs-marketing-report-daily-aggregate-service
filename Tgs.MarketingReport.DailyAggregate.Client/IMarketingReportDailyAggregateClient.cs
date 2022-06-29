@@ -6,4 +6,7 @@ public interface IMarketingReportDailyAggregateClient
         DateOnly startDate,
         DateOnly endDate,
         CancellationToken cancellationToken = default);
+
+    ValueTask GenerateMarkingDailyAggregateReportByDailyAsync(
+        CancellationToken cancellationToken = default);
 }
