@@ -47,4 +47,16 @@ internal class MarketingReportDailyAggregateClient : IMarketingReportDailyAggreg
 
         _ = response.EnsureSuccessStatusCode();
     }
+
+    public async ValueTask GenerateMarkingDailyAggregateReportByDailyAsync(CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient
+            .PutAsync(
+                $"/marketingreport/generate/daily",
+                null,
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        _ = response.EnsureSuccessStatusCode();
+    }
 }

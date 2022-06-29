@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Tgs.MarketingReport.DailyAggregate.Client</PackageId>
-    <Version>0.0.1-alpha</Version>
+    <Version>0.0.2-alpha</Version>
     <Authors>Raypro</Authors>
     <Product>Tgs.MarketingReport.DailyAggregate.Client</Product>
     <PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-marketing-report-daily-aggregate-service</PackageProjectUrl>
