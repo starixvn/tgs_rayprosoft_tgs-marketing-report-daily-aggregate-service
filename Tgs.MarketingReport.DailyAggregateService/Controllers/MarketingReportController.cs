@@ -11,15 +11,15 @@ public class MarketingReportController : ControllerBase
 {
     [HttpPut("generate", Name = "GenerateAggregateReportByDateRange")]
     public ValueTask GenerateDailyAggregateReportAsync(
-        [FromServices] ICommandService<GenerateDailyAggregateReportCommand> commandService,
+        [FromServices] ICommandService<AddScheduleTaskCommand> commandService,
         GenerateDailyAggregateReportViewModel viewModel)
         => commandService.ExecuteAsync(
-            new GenerateDailyAggregateReportCommand(viewModel.StartDate, viewModel.EndDate),
+            new AddScheduleTaskCommand(viewModel.StartDate, viewModel.EndDate),
             HttpContext.RequestAborted);
 
     [HttpPut("generate/daily", Name = "GenerateAggregateReportByDaily")]
     public ValueTask GenerateDailyAggregateReportAsync(
-        [FromServices] ICommandService<GenerateDailyAggregateReportCommand> commandService)
+        [FromServices] ICommandService<AddScheduleTaskCommand> commandService)
     {
         var now = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(8D));
 
@@ -27,7 +27,7 @@ public class MarketingReportController : ControllerBase
         var end = start.AddDays(1);
 
         return commandService.ExecuteAsync(
-            new GenerateDailyAggregateReportCommand(start, end),
+            new AddScheduleTaskCommand(start, end),
             HttpContext.RequestAborted);
     }
 }

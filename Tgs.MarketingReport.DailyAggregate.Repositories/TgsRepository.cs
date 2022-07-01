@@ -25,7 +25,7 @@ internal class TgsRepository : ITgsRepository
                 WITH register AS (
 	                SELECT
 		                agent_id,
-		                to_char(registered_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD') AS report_date,
+		                (registered_on at time zone 'Asia/Shanghai')::date AS report_date,
 		                COUNT(1) AS register_count
 	                FROM
 		                dbo.players
@@ -35,12 +35,12 @@ internal class TgsRepository : ITgsRepository
 		                and registered_on < :end_time
 	                GROUP BY
 		                agent_id,
-		                to_char(registered_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
+		                (registered_on at time zone 'Asia/Shanghai')::date
                 ),
                 deposit AS (
 	                SELECT
 		                agent_id,
-		                to_char(first_deposit_on  at time zone 'Asia/Shanghai', 'YYYY-MM-DD') AS report_date,
+		                (first_deposit_on at time zone 'Asia/Shanghai')::date AS report_date,
 		                COUNT(1) AS first_deposit_count
 	                FROM
 		                dbo.players
@@ -50,27 +50,32 @@ internal class TgsRepository : ITgsRepository
 		                and first_deposit_on < :end_time
 	                GROUP BY
 		                agent_id,
-		                to_char(first_deposit_on at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
+		                (first_deposit_on at time zone 'Asia/Shanghai')::date
                 ),
                 gaming AS (
-	                SELECT
-		                agent_id ,
-		                to_char(report_date at time zone 'Asia/Shanghai', 'YYYY-MM-DD') AS report_date,
-		                COUNT(1) AS gaming_count
-	                FROM report.player_aggregates ra
-	                WHERE
-		                agent_id IS NOT NULL
-		                and report_date >= :start_time
-		                and report_date < :end_time
-	                GROUP BY
-		                agent_id ,
-		                to_char(report_date at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
+                   SELECT
+                       g.agent_id,
+                       g.report_date,
+                       COUNT(1) AS gaming_count
+                   FROM (
+	                    SELECT DISTINCT
+		                    agent_id,
+		                    (report_date at time zone 'Asia/Shanghai')::date AS report_date,
+		                    player_code
+	                    FROM report.player_aggregates ra
+	                    WHERE
+		                    agent_id IS NOT NULL
+		                    and report_date >= :start_time
+		                    and report_date < :end_time
+                            and bet_amount > 0
+                    ) g
+	                GROUP BY g.agent_id, g.report_date
                 )
                 INSERT INTO report.marketing_report_daily_aggregates(agent_id, report_date, register_count, first_deposit_count, gaming_count)
                 SELECT
 	                DISTINCT
 	                COALESCE(r.agent_id, d.agent_id, g.agent_id) AS agent_id,
-	                to_date(COALESCE(r.report_date, d.report_date, g.report_date), 'YYYY-MM-DD') AS report_date,
+	                COALESCE(r.report_date, d.report_date, g.report_date) AS report_date,
 	                COALESCE(r.register_count, 0) AS register_count,
 	                COALESCE(d.first_deposit_count, 0) AS first_deposit_count,
 	                COALESCE(g.gaming_count, 0) AS gaming_count
