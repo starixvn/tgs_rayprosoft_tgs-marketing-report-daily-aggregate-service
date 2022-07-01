@@ -62,6 +62,7 @@ internal class TgsRepository : ITgsRepository
 		                agent_id IS NOT NULL
 		                and report_date >= :start_time
 		                and report_date < :end_time
+                        and bet_amount > 0
 	                GROUP BY
 		                agent_id ,
 		                to_char(report_date at time zone 'Asia/Shanghai', 'YYYY-MM-DD')
