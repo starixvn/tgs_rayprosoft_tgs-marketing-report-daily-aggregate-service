@@ -10,5 +10,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddMarketingReportDailyAggregateCore(this IServiceCollection services)
         => services
             .RegisterAllServiceUtilityTypes(Assembly.GetExecutingAssembly(), ServiceLifetime.Transient)
-            .AddSingleton<ScheduleTaskQueue>();
+            .AddSingleton<ScheduleTaskQueue>()
+            .AddHostedService<ScheduleTaskBackgroundService>();
 }

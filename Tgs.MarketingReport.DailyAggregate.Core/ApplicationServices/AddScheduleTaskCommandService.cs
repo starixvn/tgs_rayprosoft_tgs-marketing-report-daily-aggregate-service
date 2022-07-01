@@ -12,5 +12,11 @@ internal class AddScheduleTaskCommandService : ICommandService<AddScheduleTaskCo
     }
 
     public ValueTask ExecuteAsync(AddScheduleTaskCommand command, CancellationToken cancellationToken = default)
-        => throw new NotImplementedException();
+    {
+        var task = new ScheduleTask(command.StartDate, command.EndDate);
+
+        _scheduleTaskQueue.Enqueue(task);
+
+        return ValueTask.CompletedTask;
+    }
 }
