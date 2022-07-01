@@ -53,19 +53,23 @@ internal class TgsRepository : ITgsRepository
 		                (first_deposit_on at time zone 'Asia/Shanghai')::date
                 ),
                 gaming AS (
-	                SELECT
-		                agent_id ,
-		                (report_date at time zone 'Asia/Shanghai')::date AS report_date,
-		                COUNT(1) AS gaming_count
-	                FROM report.player_aggregates ra
-	                WHERE
-		                agent_id IS NOT NULL
-		                and report_date >= :start_time
-		                and report_date < :end_time
-                        and bet_amount > 0
-	                GROUP BY
-		                agent_id ,
-		                (report_date at time zone 'Asia/Shanghai')::date
+                   SELECT
+                       g.agent_id,
+                       g.report_date,
+                       COUNT(1) AS gaming_count
+                   FROM (
+	                    SELECT DISTINCT
+		                    agent_id,
+		                    (report_date at time zone 'Asia/Shanghai')::date AS report_date,
+		                    player_code
+	                    FROM report.player_aggregates ra
+	                    WHERE
+		                    agent_id IS NOT NULL
+		                    and report_date >= :start_time
+		                    and report_date < :end_time
+                            and bet_amount > 0
+                    ) g
+	                GROUP BY g.agent_id, g.report_date
                 )
                 INSERT INTO report.marketing_report_daily_aggregates(agent_id, report_date, register_count, first_deposit_count, gaming_count)
                 SELECT
