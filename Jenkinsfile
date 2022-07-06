@@ -6,7 +6,7 @@ pipeline {
 	
 	environment {
 		BuildConfiguration="Debug"
-        ImageName="harbor.rpgp.cc/tgs/marketing-report-daily-aggregate"
+        ImageName="pgtgs/marketing-report-daily-aggregate"
 	}
 
 	stages {
