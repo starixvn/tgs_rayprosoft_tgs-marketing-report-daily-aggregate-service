@@ -73,16 +73,27 @@ internal class TgsRepository : ITgsRepository
                 )
                 INSERT INTO report.marketing_report_daily_aggregates(agent_id, report_date, register_count, first_deposit_count, gaming_count)
                 SELECT
-	                DISTINCT
-	                COALESCE(r.agent_id, d.agent_id, g.agent_id) AS agent_id,
-	                COALESCE(r.report_date, d.report_date, g.report_date) AS report_date,
-	                COALESCE(r.register_count, 0) AS register_count,
-	                COALESCE(d.first_deposit_count, 0) AS first_deposit_count,
+                    DISTINCT
+                    COALESCE(m.agent_id, g.agent_id) AS agent_id,
+	                COALESCE(m.report_date, g.report_date) AS report_date,
+	                COALESCE(m.register_count, 0) AS register_count,
+	                COALESCE(m.first_deposit_count, 0) AS first_deposit_count,
 	                COALESCE(g.gaming_count, 0) AS gaming_count
-                FROM register AS r
-                FULL JOIN deposit d ON r.agent_id = d.agent_id AND r.report_date = d.report_date
-                FULL JOIN gaming g ON r.agent_id = g.agent_id AND r.report_date = g.report_date
-                ON CONFLICT (agent_id, report_date) DO NOTHING
+                FROM
+	                (SELECT
+		                DISTINCT
+		                COALESCE(r.agent_id, d.agent_id) AS agent_id,
+		                COALESCE(r.report_date, d.report_date) AS report_date,
+		                COALESCE(r.register_count, 0) AS register_count,
+		                COALESCE(d.first_deposit_count, 0) AS first_deposit_count
+	                FROM register AS r
+	                FULL JOIN deposit d ON r.agent_id = d.agent_id AND r.report_date = d.report_date) AS m
+                FULL JOIN gaming g ON m.agent_id = g.agent_id AND m.report_date = g.report_date
+                ON CONFLICT (agent_id, report_date) DO
+                UPDATE
+                   SET register_count = excluded.register_count,
+                       first_deposit_count = excluded.first_deposit_count,
+                       gaming_count = excluded.gaming_count
                 ";
 
         var parameters = new NpgsqlParameter[]
