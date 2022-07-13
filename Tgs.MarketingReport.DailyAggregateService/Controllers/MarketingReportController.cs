@@ -23,8 +23,8 @@ public class MarketingReportController : ControllerBase
     {
         var now = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(8D));
 
-        var start = new DateOnly(now.Year, now.Month, now.Day);
-        var end = start.AddDays(1);
+        var end = DateOnly.FromDateTime(now.DateTime);
+        var start = end.AddDays(-1);
 
         return commandService.ExecuteAsync(
             new AddScheduleTaskCommand(start, end),
