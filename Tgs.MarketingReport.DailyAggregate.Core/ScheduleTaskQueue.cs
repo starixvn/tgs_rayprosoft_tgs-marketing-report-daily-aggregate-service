@@ -79,7 +79,7 @@ internal class ScheduleTaskQueue
             await commandService.ExecuteAsync(command, cancellationToken)
                 .ConfigureAwait(false);
 
-            _logger.LogInformation("Add to schedule task of date: {processDate}", scheduleTask.ProcessDate);
+            _logger.LogInformation("Process schedule task of date: {processDate}", scheduleTask.ProcessDate);
         }
         catch (Exception ex)
         {
