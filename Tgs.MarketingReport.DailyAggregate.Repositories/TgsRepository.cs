@@ -24,10 +24,10 @@ internal class TgsRepository : ITgsRepository
         var to = processDate;
 
         var startTime = new DateTimeOffset(from.Year, from.Month, from.Day, 0, 0, 0, TimeSpan.FromHours(8))
-            .UtcDateTime.ToUniversalTime();
+            .UtcDateTime;
 
         var endTime = new DateTimeOffset(to.Year, to.Month, to.Day, 0, 0, 0, TimeSpan.FromHours(8))
-            .UtcDateTime.ToUniversalTime();
+            .UtcDateTime;
 
         var sql = @"
                 WITH register AS (
