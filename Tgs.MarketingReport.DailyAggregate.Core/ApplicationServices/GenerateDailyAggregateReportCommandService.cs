@@ -1,5 +1,4 @@
 ﻿using Tgs.ServiceUtility;
-using Tgs.MarketingReport.DailyAggregate.Core.ApplicationServices;
 
 namespace Tgs.MarketingReport.DailyAggregate.Core.ApplicationServices;
 
@@ -25,8 +24,8 @@ internal class GenerateDailyAggregateReportCommandService : ICommandService<Gene
             : GetDateTimeOffsetOfEightHourTimezone(command.EndDate);
 
         return _tgsRepository.GenerateDailyAggregateReportAsync(
-            startTime.DateTime.ToUniversalTime(),
-            endTime.DateTime.ToUniversalTime(),
+            startTime.UtcDateTime.ToUniversalTime(),
+            endTime.UtcDateTime.ToUniversalTime(),
             cancellationToken);
     }
 
