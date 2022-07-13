@@ -3,7 +3,6 @@
 public interface ITgsRepository
 {
     ValueTask GenerateDailyAggregateReportAsync(
-        DateTime startTime,
-        DateTime endTime,
+        DateOnly processDate,
         CancellationToken cancellationToken = default);
 }

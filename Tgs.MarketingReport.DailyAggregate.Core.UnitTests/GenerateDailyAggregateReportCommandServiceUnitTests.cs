@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
 using Tgs.MarketingReport.DailyAggregate.Core.ApplicationServices;
-using Tgs.MarketingReport.DailyAggregate.Core;
 
 namespace Tgs.MarketingReport.DailyAggregate.Core.UnitTests;
 
@@ -11,10 +10,9 @@ internal class GenerateDailyAggregateReportCommandServiceUnitTests
     {
         var fakeRepository = Substitute.For<ITgsRepository>();
 
-        var start = DateOnly.Parse("2022-06-20");
-        var end = DateOnly.Parse("2022-06-21");
+        var processDate = DateOnly.Parse("2022-06-20");
 
-        var command = new GenerateDailyAggregateReportCommand(start, end);
+        var command = new GenerateDailyAggregateReportCommand(processDate);
 
         var sut = new GenerateDailyAggregateReportCommandService(fakeRepository);
 
@@ -22,6 +20,6 @@ internal class GenerateDailyAggregateReportCommandServiceUnitTests
 
         _ = fakeRepository
             .Received(1)
-            .GenerateDailyAggregateReportAsync(Arg.Any<DateTime>(), Arg.Any<DateTime>());
+            .GenerateDailyAggregateReportAsync(Arg.Is(processDate));
     }
 }
