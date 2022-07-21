@@ -17,10 +17,18 @@ internal class TgsRepository : ITgsRepository
     }
 
     public async ValueTask GenerateDailyAggregateReportAsync(
-        DateTime startTime,
-        DateTime endTime,
+        DateOnly processDate,
         CancellationToken cancellationToken = default)
     {
+        var from = processDate.AddDays(-1);
+        var to = processDate;
+
+        var startTime = new DateTimeOffset(from.Year, from.Month, from.Day, 0, 0, 0, TimeSpan.FromHours(8))
+            .UtcDateTime;
+
+        var endTime = new DateTimeOffset(to.Year, to.Month, to.Day, 0, 0, 0, TimeSpan.FromHours(8))
+            .UtcDateTime;
+
         var sql = @"
                 WITH register AS (
 	                SELECT
