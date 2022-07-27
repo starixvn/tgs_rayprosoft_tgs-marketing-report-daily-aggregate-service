@@ -74,19 +74,21 @@ internal class ScheduleTaskQueue
             var commandService =
                 scope.ServiceProvider.GetRequiredService<ICommandService<GenerateDailyAggregateReportCommand>>();
 
-            var command = new GenerateDailyAggregateReportCommand(scheduleTask.StartDate, scheduleTask.EndDate);
+            var command = new GenerateDailyAggregateReportCommand(scheduleTask.ProcessDate);
 
             await commandService.ExecuteAsync(command, cancellationToken)
                 .ConfigureAwait(false);
+
+            _logger.LogInformation("Process schedule task of date: {processDate}", scheduleTask.ProcessDate);
         }
         catch (Exception ex)
         {
             _logger.Log(
                 LogLevel.Error,
-                new EventId(10001),
+                new EventId(10002),
                 scheduleTask,
                 ex,
-                (state, _) => $"Process schedule task (start: {state.StartDate}, end: {state.EndDate}) occur error.");
+                (state, _) => $"Process schedule task of date: {state.ProcessDate} occur error.");
         }
     }
 }

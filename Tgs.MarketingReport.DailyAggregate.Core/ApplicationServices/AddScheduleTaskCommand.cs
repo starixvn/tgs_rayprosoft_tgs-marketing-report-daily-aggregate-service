@@ -1,5 +1,3 @@
 ﻿namespace Tgs.MarketingReport.DailyAggregate.Core.ApplicationServices;
 
-public record AddScheduleTaskCommand(
-    DateOnly StartDate,
-    DateOnly EndDate);
+public record AddScheduleTaskCommand(DateOnly ProcessDate);

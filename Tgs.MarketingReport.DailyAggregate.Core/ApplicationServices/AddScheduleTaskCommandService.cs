@@ -13,7 +13,7 @@ internal class AddScheduleTaskCommandService : ICommandService<AddScheduleTaskCo
 
     public ValueTask ExecuteAsync(AddScheduleTaskCommand command, CancellationToken cancellationToken = default)
     {
-        var task = new ScheduleTask(command.StartDate, command.EndDate);
+        var task = new ScheduleTask(command.ProcessDate);
 
         _scheduleTaskQueue.Enqueue(task);
 

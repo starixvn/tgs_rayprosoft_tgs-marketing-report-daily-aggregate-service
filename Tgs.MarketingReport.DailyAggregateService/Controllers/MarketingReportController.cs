@@ -10,12 +10,23 @@ namespace Tgs.MarketingReport.DailyAggregateService.Controllers;
 public class MarketingReportController : ControllerBase
 {
     [HttpPut("generate", Name = "GenerateAggregateReportByDateRange")]
-    public ValueTask GenerateDailyAggregateReportAsync(
+    public async ValueTask GenerateDailyAggregateReportAsync(
         [FromServices] ICommandService<AddScheduleTaskCommand> commandService,
         GenerateDailyAggregateReportViewModel viewModel)
-        => commandService.ExecuteAsync(
-            new AddScheduleTaskCommand(viewModel.StartDate, viewModel.EndDate),
-            HttpContext.RequestAborted);
+    {
+        var start = viewModel.StartDate;
+        var end = viewModel.EndDate == viewModel.StartDate ? viewModel.EndDate.AddDays(1) : viewModel.EndDate;
+
+        var diffDays = end.DayNumber - start.DayNumber + 1;
+
+        for (var i = 1; i < diffDays; i++)
+        {
+            await commandService.ExecuteAsync(
+                    new AddScheduleTaskCommand(start.AddDays(i)),
+                    HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+        }
+    }
 
     [HttpPut("generate/daily", Name = "GenerateAggregateReportByDaily")]
     public ValueTask GenerateDailyAggregateReportAsync(
@@ -23,11 +34,10 @@ public class MarketingReportController : ControllerBase
     {
         var now = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(8D));
 
-        var end = DateOnly.FromDateTime(now.DateTime);
-        var start = end.AddDays(-1);
+        var processDate = DateOnly.FromDateTime(now.DateTime);
 
         return commandService.ExecuteAsync(
-            new AddScheduleTaskCommand(start, end),
+            new AddScheduleTaskCommand(processDate),
             HttpContext.RequestAborted);
     }
 }
