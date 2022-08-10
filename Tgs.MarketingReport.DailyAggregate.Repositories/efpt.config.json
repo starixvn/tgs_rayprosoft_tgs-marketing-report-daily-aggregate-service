@@ -3,22 +3,41 @@
    "ContextClassName": "TgsContext",
    "ContextNamespace": "Entities",
    "DefaultDacpacSchema": null,
-   "FilterSchemas": false,
+   "FilterSchemas": true,
    "IncludeConnectionString": false,
    "ModelNamespace": "Entities",
    "OutputContextPath": "Entities",
    "OutputPath": "Entities\\Models",
    "ProjectRootNamespace": "Tgs.MarketingReport.DailyAggregate.Repositories",
-   "Schemas": null,
+   "Schemas": [
+      {
+         "Name": "dbo"
+      },
+      {
+         "Name": "report"
+      }
+   ],
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,
    "Tables": [
+      {
+         "Name": "dbo.player_daily_gaming_statistics",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.player_daily_register_statistics",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.marketing_statistics_settings",
+         "ObjectType": 0
+      },
       {
          "Name": "report.marketing_report_daily_aggregates",
          "ObjectType": 0
       }
    ],
-   "UiHint": "Tgs",
+   "UiHint": "tgs-local",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": true,

@@ -1,9 +1,13 @@
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.MarketingReport.DailyAggregateService;
+using Tgs.MarketingReport.DailyAggregateService.MessageQueue;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,12 +30,26 @@ builder.Logging
 
 builder.Services
     .AddMarketingReportDailyAggregateCore()
-    .AddMarketingReportDailyAggregateRepositories((sp, dbBuilder) =>
-    {
-        var config = sp.GetRequiredService<IConfiguration>();
+    .AddMarketingReportDailyAggregateRepositories((sp, dbBuilder) => dbBuilder
+        .UseNpgsql("name=Tgs"));
 
-        _ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"));
-    });
+builder.Services
+    .AddMessageQueue()
+    .AddNatsMessageQueue(config => config
+        .ConfigQueueOptions((options, sp) =>
+        {
+            var config = sp.GetRequiredService<IConfiguration>();
+
+            options.Url = config.GetConnectionString("Nats");
+        })
+        .AddReplyHandler<PlayerDailyGamingHandler>("tgs.gaming.background.player", "tgs.gaming.background.player"))
+    .AddNatsGlobPatternExchange("*");
+
+builder.Services
+    .AddTransient<ScheduleBackgroundJob>()
+    .AddHangfire((_, configuration) => configuration
+        .UseMemoryStorage())
+    .AddHangfireServer();
 
 builder.Services
     .AddRouting(options => options.LowercaseUrls = true)
