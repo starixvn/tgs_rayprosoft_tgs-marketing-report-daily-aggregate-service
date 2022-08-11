@@ -9,6 +9,8 @@ namespace Tgs.MarketingReport.DailyAggregate.Repositories;
 internal class TgsRepository : ITgsRepository
 {
     private const string PlayerDailyGamingKey = "PlayerDailyGaming";
+    private const string PlayerDailyRegisterKey = "PlayerDailyRegister";
+
     private readonly TgsContext _context;
 
     public TgsRepository(TgsContext context)
@@ -136,6 +138,23 @@ internal class TgsRepository : ITgsRepository
             : DateOnly.FromDateTime(value.Value.DateTime);
     }
 
+    public async ValueTask<DateOnly?> GetPlayerDailyRegisterStatisticsLastProcessDateAsync(CancellationToken cancellationToken = default)
+    {
+        var setting = await _context.MarketingStatisticsSettings
+            .FirstOrDefaultAsync(
+                setting => setting.RecordKey == PlayerDailyRegisterKey,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        var value = setting is null
+            ? (DateTimeOffset?)null
+            : new DateTimeOffset(setting.ProcessedTime).ToOffset(TimeSpan.FromHours(8D));
+
+        return value is null
+            ? null
+            : DateOnly.FromDateTime(value.Value.DateTime);
+    }
+
     public async ValueTask ProcessPlayerDailyGamingStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default)
     {
         var reportDateTime = new DateTimeOffset(
@@ -146,11 +165,11 @@ internal class TgsRepository : ITgsRepository
             .FromSqlInterpolated(
                 @$"
                 SELECT
-                    {processDate} AS ReportDate,
-                    PGA.player_code AS PlayerCode,
-                    GP.code AS GpCode,
-                    G.sub_game_provider_code AS SubGpCode,
-                    Sum(PGA.win_loss) AS WinLossSummary
+                    {processDate} AS report_date,
+                    PGA.player_code AS player_code,
+                    GP.code AS gp_code,
+                    G.sub_game_provider_code AS sub_gp_code,
+                    Sum(PGA.win_loss) AS win_loss
                 FROM
                     report.player_game_rebate_aggregates AS PGA
                     JOIN
@@ -214,6 +233,103 @@ internal class TgsRepository : ITgsRepository
             .ConfigureAwait(false);
     }
 
+    public async ValueTask ProcessPlayerDailyRegisterStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default)
+    {
+        var (From, To) = (processDate.AddDays(-1), processDate);
+        var queryTimeRange = (
+            From: new DateTimeOffset(
+                From
+                    .AddDays(-1)
+                    .ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.FromHours(16D)), DateTimeKind.Utc),
+                TimeSpan.Zero),
+            To: new DateTimeOffset(
+                To
+                    .AddDays(-1)
+                    .ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.FromHours(16D)), DateTimeKind.Utc),
+                TimeSpan.Zero));
+
+        var processData = await _context.PlayerDailyRegisterStatistics
+            .FromSqlInterpolated(
+                @$"
+                SELECT
+                    P.player_code,
+                    {processDate} AS report_date,
+                    COALESCE(PLR.current_login_count, 0) AS daily_login_count,
+                    PIR.record_on AS last_login_on,
+                    0 AS total_login_count
+                FROM
+                    dbo.players AS P
+                    LEFT JOIN
+                    (
+                        SELECT
+                            player_code,
+                            Count(1) AS current_login_count
+                        FROM
+                            dbo.player_login_records
+                        WHERE
+                            created_on >= {queryTimeRange.From}
+                            AND
+                            created_on < {queryTimeRange.To}
+                        GROUP BY
+                            player_code
+                    ) AS PLR ON P.player_code = PLR.player_code
+                    LEFT JOIN
+                    dbo.player_ip_records AS PIR ON P.player_code = PIR.player_code
+                        AND PIR.ip_type = 2
+                WHERE
+                    P.registered_on >= {queryTimeRange.From}
+                    AND
+                    P.registered_on < {queryTimeRange.To}")
+            .AsNoTracking()
+            .ToArrayAsync(cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        var existsData = await _context.PlayerDailyRegisterStatistics
+            .Where(row => row.ReportDate == processDate)
+            .ToArrayAsync(cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        var leftJoin = from input in processData
+                       join db in existsData
+                        on new { input.PlayerCode, input.ReportDate }
+                            equals new { db.PlayerCode, db.ReportDate }
+                        into g
+                       from db in g.DefaultIfEmpty()
+                       select new
+                       {
+                           Input = input,
+                           Db = db
+                       };
+
+        var rightJoin = from db in existsData
+                        join input in processData
+                            on new { db.PlayerCode, db.ReportDate }
+                                equals new { input.PlayerCode, input.ReportDate }
+                            into g
+                        from input in g.DefaultIfEmpty()
+                        where input is null
+                        select db;
+
+        foreach (var p in leftJoin)
+            if (p.Db is not null)
+            {
+                var modifyRow = p.Db;
+                modifyRow.LastLoginOn = p.Input.LastLoginOn;
+                modifyRow.DailyLoginCount = p.Input.DailyLoginCount;
+                modifyRow.TotalLoginCount = p.Input.TotalLoginCount;
+            }
+            else
+                _ = await _context.PlayerDailyRegisterStatistics
+                    .AddAsync(p.Input, cancellationToken)
+                    .ConfigureAwait(false);
+
+        _context.RemoveRange(rightJoin);
+
+        _ = await _context
+            .SaveChangesAsync(cancellationToken)
+            .ConfigureAwait(false);
+    }
+
     public async ValueTask SetPlayerDailyGamingStatisticsLastProcessDateAsync(DateOnly date, CancellationToken cancellationToken = default)
     {
         var setting = await _context.MarketingStatisticsSettings
@@ -224,6 +340,27 @@ internal class TgsRepository : ITgsRepository
             ?? _context.MarketingStatisticsSettings.Add(new MarketingStatisticsSetting
             {
                 RecordKey = PlayerDailyGamingKey
+            }).Entity;
+
+        setting.ProcessedTime = date
+            .AddDays(-1)
+            .ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.FromHours(16D)), DateTimeKind.Utc);
+
+        _ = await _context
+            .SaveChangesAsync(cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public async ValueTask SetPlayerDailyRegisterStatisticsLastProcessDateAsync(DateOnly date, CancellationToken cancellationToken = default)
+    {
+        var setting = await _context.MarketingStatisticsSettings
+            .FirstOrDefaultAsync(
+                setting => setting.RecordKey == PlayerDailyRegisterKey,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false)
+            ?? _context.MarketingStatisticsSettings.Add(new MarketingStatisticsSetting
+            {
+                RecordKey = PlayerDailyRegisterKey
             }).Entity;
 
         setting.ProcessedTime = date

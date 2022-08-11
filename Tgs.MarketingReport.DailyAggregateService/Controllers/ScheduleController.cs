@@ -10,9 +10,14 @@ public class ScheduleController : ControllerBase
     [HttpPost("gaming/player/{processDate}", Name = "QueueProcessPlayerGamingStatisticsWithProcessDate")]
     public void QueueProcessPlayerGamingStatisticsWithProcessDate(
         DateOnly processDate)
-    {
-        _ = BackgroundJob.Enqueue<ScheduleBackgroundJob>(job => job.ExecuteAsync(
+        => BackgroundJob.Enqueue<ScheduleBackgroundJob>(job => job.ExecuteAsync(
             processDate,
             "tgs.gaming.background.player"));
-    }
+
+    [HttpPost("register/player/{processDate}", Name = "QueueProcessPlayerRegisterStatisticsWithProcessDate")]
+    public void QueueProcessPlayerRegisterStatisticsWithProcessDate(
+        DateOnly processDate)
+        => BackgroundJob.Enqueue<ScheduleBackgroundJob>(job => job.ExecuteAsync(
+            processDate,
+            "tgs.register.background.player"));
 }

@@ -10,7 +10,7 @@ namespace Tgs.MarketingReport.DailyAggregate.Repositories.Entities
         public string PlayerCode { get; set; } = null!;
         public DateOnly ReportDate { get; set; }
         public int DailyLoginCount { get; set; }
-        public DateTime LastLoginOn { get; set; }
+        public DateTime? LastLoginOn { get; set; }
         public int TotalLoginCount { get; set; }
     }
 }

@@ -42,7 +42,8 @@ builder.Services
 
             options.Url = config.GetConnectionString("Nats");
         })
-        .AddReplyHandler<PlayerDailyGamingHandler>("tgs.gaming.background.player", "tgs.gaming.background.player"))
+        .AddReplyHandler<PlayerDailyGamingHandler>("tgs.gaming.background.player", "tgs.gaming.background.player")
+        .AddReplyHandler<PlayerDailyRegisterHandler>("tgs.register.background.player", "tgs.register.background.player"))
     .AddNatsGlobPatternExchange("*");
 
 builder.Services
