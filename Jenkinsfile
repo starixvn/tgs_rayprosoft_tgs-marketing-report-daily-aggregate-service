@@ -131,24 +131,13 @@ pipeline {
                                 "resources": $resources
                             }
                         """
+                        sh '''
+                            kubectl -n ${kube_ns} apply -f deployment/k8s/cronjob.yaml
+                        '''
                     }
                 }
 			}
 		}
-
-		stage('Add Tag on Prod') {
-            when {
-                expression {
-                    return env.kube_ns == 'prod';
-                }
-            }			
-            steps {	
-				sshagent(['ssh-jenkins']) {
-                    sh "git tag -a ${TAG} -m ${TAG}"
-                    sh "git push ${GIT_URL} ${TAG} HEAD:${GIT_BRANCH}"
-                }
-            }
-        }
 	}
 
 	post {
