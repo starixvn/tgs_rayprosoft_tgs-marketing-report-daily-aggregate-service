@@ -8,9 +8,9 @@ namespace Tgs.MarketingReport.DailyAggregate.Repositories;
 
 internal class TgsRepository : ITgsRepository
 {
+    private const string AgentDailyMarketingKey = "AgentDailyMarketing";
     private const string PlayerDailyGamingKey = "PlayerDailyGaming";
     private const string PlayerDailyRegisterKey = "PlayerDailyRegister";
-
     private readonly TgsContext _context;
 
     public TgsRepository(TgsContext context)
@@ -121,6 +121,23 @@ internal class TgsRepository : ITgsRepository
              sql, parameters, cancellationToken).ConfigureAwait(false);
     }
 
+    public async ValueTask<DateOnly?> GetAgentDailyMarketingStatisticsLastProcessDateAsync(CancellationToken cancellationToken = default)
+    {
+        var setting = await _context.MarketingStatisticsSettings
+            .FirstOrDefaultAsync(
+                setting => setting.RecordKey == AgentDailyMarketingKey,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        var value = setting is null
+            ? (DateTimeOffset?)null
+            : new DateTimeOffset(setting.ProcessedTime).ToOffset(TimeSpan.FromHours(8D));
+
+        return value is null
+            ? null
+            : DateOnly.FromDateTime(value.Value.DateTime);
+    }
+
     public async ValueTask<DateOnly?> GetPlayerDailyGamingStatisticsLastProcessDateAsync(CancellationToken cancellationToken = default)
     {
         var setting = await _context.MarketingStatisticsSettings
@@ -153,6 +170,106 @@ internal class TgsRepository : ITgsRepository
         return value is null
             ? null
             : DateOnly.FromDateTime(value.Value.DateTime);
+    }
+
+    public async ValueTask ProcessAgentDailyMarketingStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default)
+    {
+        var processData = await _context.AgentDailyMarketingStatistics
+            .FromSqlInterpolated(
+                @$"
+                WITH statistics
+                AS
+                (
+                    SELECT
+                        COALESCE(RS.report_date, GS.report_date) AS report_date,
+                        COALESCE(RS.player_code, GS.player_code) AS player_code,
+                        CASE
+                            WHEN RS.player_code IS NULL THEN false
+                            ELSE true
+                        END AS is_register,
+                        CASE
+                            WHEN GS.player_code IS NULL THEN false
+                            ELSE true
+                        END AS is_gaming
+                    FROM
+                        dbo.player_daily_register_statistics AS RS
+                        FULL JOIN
+                        (
+                            SELECT DISTINCT
+                                report_date,
+                                player_code
+                            FROM
+                                dbo.player_daily_gaming_statistics
+                            WHERE
+                                report_date = {processDate}
+                        ) AS GS ON RS.player_code = GS.player_code
+                            AND RS.report_date = GS.report_date
+                    WHERE
+                        RS.report_date = {processDate}
+                )
+                SELECT
+                    P.agent_id,
+                    P.brand_id,
+                    S.report_date,
+                    Count(1) filter ( where S.is_gaming = true ) AS gaming_count,
+                    Count(1) filter ( where S.is_register = true ) AS register_count
+                FROM
+                    statistics AS S
+                    join
+                    dbo.players AS P ON S.player_code = P.player_code
+                WHERE
+                    P.agent_id IS NOT NULL
+                GROUP BY
+                    P.agent_id,
+                    P.brand_id,
+                    S.report_date")
+            .AsNoTracking()
+            .ToArrayAsync(cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        var existsData = await _context.AgentDailyMarketingStatistics
+            .Where(row => row.ReportDate == processDate)
+            .ToArrayAsync(cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        var leftJoin = from input in processData
+                       join db in existsData
+                        on new { input.AgentId, input.ReportDate }
+                            equals new { db.AgentId, db.ReportDate }
+                        into g
+                       from db in g.DefaultIfEmpty()
+                       select new
+                       {
+                           Input = input,
+                           Db = db
+                       };
+
+        var rightJoin = from db in existsData
+                        join input in processData
+                            on new { db.AgentId, db.ReportDate }
+                                equals new { input.AgentId, input.ReportDate }
+                            into g
+                        from input in g.DefaultIfEmpty()
+                        where input is null
+                        select db;
+
+        foreach (var p in leftJoin)
+            if (p.Db is not null)
+            {
+                var modifyRow = p.Db;
+                modifyRow.RegisterCount = p.Input.RegisterCount;
+                modifyRow.GamingCount = p.Input.GamingCount;
+            }
+            else
+                _ = await _context.AgentDailyMarketingStatistics
+                    .AddAsync(p.Input, cancellationToken)
+                    .ConfigureAwait(false);
+
+        _context.RemoveRange(rightJoin);
+
+        _ = await _context
+            .SaveChangesAsync(cancellationToken)
+            .ConfigureAwait(false);
     }
 
     public async ValueTask ProcessPlayerDailyGamingStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default)
@@ -324,6 +441,27 @@ internal class TgsRepository : ITgsRepository
                     .ConfigureAwait(false);
 
         _context.RemoveRange(rightJoin);
+
+        _ = await _context
+            .SaveChangesAsync(cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public async ValueTask SetAgentDailyMarketingStatisticsLastProcessDateAsync(DateOnly date, CancellationToken cancellationToken = default)
+    {
+        var setting = await _context.MarketingStatisticsSettings
+            .FirstOrDefaultAsync(
+                setting => setting.RecordKey == AgentDailyMarketingKey,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false)
+            ?? _context.MarketingStatisticsSettings.Add(new MarketingStatisticsSetting
+            {
+                RecordKey = AgentDailyMarketingKey
+            }).Entity;
+
+        setting.ProcessedTime = date
+            .AddDays(-1)
+            .ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.FromHours(16D)), DateTimeKind.Utc);
 
         _ = await _context
             .SaveChangesAsync(cancellationToken)

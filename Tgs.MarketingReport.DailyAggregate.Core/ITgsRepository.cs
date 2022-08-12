@@ -6,13 +6,19 @@ public interface ITgsRepository
         DateOnly processDate,
         CancellationToken cancellationToken = default);
 
+    ValueTask<DateOnly?> GetAgentDailyMarketingStatisticsLastProcessDateAsync(CancellationToken cancellationToken = default);
+
     ValueTask<DateOnly?> GetPlayerDailyGamingStatisticsLastProcessDateAsync(CancellationToken cancellationToken = default);
 
     ValueTask<DateOnly?> GetPlayerDailyRegisterStatisticsLastProcessDateAsync(CancellationToken cancellationToken = default);
 
+    ValueTask ProcessAgentDailyMarketingStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default);
+
     ValueTask ProcessPlayerDailyGamingStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default);
 
     ValueTask ProcessPlayerDailyRegisterStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default);
+
+    ValueTask SetAgentDailyMarketingStatisticsLastProcessDateAsync(DateOnly date, CancellationToken cancellationToken = default);
 
     ValueTask SetPlayerDailyGamingStatisticsLastProcessDateAsync(DateOnly date, CancellationToken cancellationToken = default);
 

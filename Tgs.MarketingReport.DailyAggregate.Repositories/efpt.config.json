@@ -33,6 +33,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "dbo.agent_daily_marketing_statistics",
+         "ObjectType": 0
+      },
+      {
          "Name": "report.marketing_report_daily_aggregates",
          "ObjectType": 0
       }

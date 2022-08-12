@@ -7,6 +7,13 @@ namespace Tgs.MarketingReport.DailyAggregateService.Controllers;
 [ApiController]
 public class ScheduleController : ControllerBase
 {
+    [HttpPost("marketing/agent/{processDate}", Name = "QueueProcessAgentMarketingStatisticsWithProcessDate")]
+    public void QueueProcessAgentMarketingStatisticsWithProcessDate(
+        DateOnly processDate)
+        => BackgroundJob.Enqueue<ScheduleBackgroundJob>(job => job.ExecuteAsync(
+            processDate,
+            "tgs.marketing.background.agent"));
+
     [HttpPost("gaming/player/{processDate}", Name = "QueueProcessPlayerGamingStatisticsWithProcessDate")]
     public void QueueProcessPlayerGamingStatisticsWithProcessDate(
         DateOnly processDate)
