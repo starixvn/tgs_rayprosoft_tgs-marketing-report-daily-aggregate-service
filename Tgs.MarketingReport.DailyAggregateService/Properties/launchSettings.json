@@ -1,20 +1,22 @@
 {
-  "profiles": {
-    "Tgs.MarketingReportDailyAggregateService": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "healthz",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:7226;http://localhost:5226",
-      "dotnetRunMessages": true
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "publishAllPorts": true
-    }
-  }
+	"profiles": {
+		"Tgs.MarketingReportDailyAggregateService": {
+			"commandName": "Project",
+			"launchBrowser": true,
+			"launchUrl": "swagger",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"OTEL_SERVICE_NAME": "Marketing-Report-Daily-Aggregate(local)",
+				"NODE_IP": "otel.rpgp.cc"
+			},
+			"applicationUrl": "https://localhost:7226;http://localhost:5226",
+			"dotnetRunMessages": true
+		},
+		"Docker": {
+			"commandName": "Docker",
+			"launchBrowser": true,
+			"launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+			"publishAllPorts": true
+		}
+	}
 }

@@ -19,14 +19,22 @@ namespace Tgs.MarketingReport.DailyAggregate.Repositories.Entities
         {
         }
 
+        public virtual DbSet<AgentDailyMarketingStatistic> AgentDailyMarketingStatistics { get; set; } = null!;
         public virtual DbSet<MarketingReportDailyAggregate> MarketingReportDailyAggregates { get; set; } = null!;
+        public virtual DbSet<MarketingStatisticsSetting> MarketingStatisticsSettings { get; set; } = null!;
+        public virtual DbSet<PlayerDailyGamingStatistic> PlayerDailyGamingStatistics { get; set; } = null!;
+        public virtual DbSet<PlayerDailyRegisterStatistic> PlayerDailyRegisterStatistics { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("ltree")
                 .HasPostgresExtension("pg_trgm");
 
+            modelBuilder.ApplyConfiguration(new Configurations.AgentDailyMarketingStatisticConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.MarketingReportDailyAggregateConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.MarketingStatisticsSettingConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.PlayerDailyGamingStatisticConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.PlayerDailyRegisterStatisticConfiguration());
             OnModelCreatingPartial(modelBuilder);
         }
 
