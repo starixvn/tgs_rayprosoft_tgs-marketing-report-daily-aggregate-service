@@ -51,7 +51,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: tgs-connections
-                  key: nat
+                  key: nats
             - name: DOTNET_DiagnosticPorts
               value: /diag/port
           ports:
