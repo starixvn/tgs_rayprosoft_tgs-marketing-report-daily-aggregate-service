@@ -206,6 +206,8 @@ internal class TgsRepository : ITgsRepository
                             AND RS.report_date = GS.report_date
                     WHERE
                         RS.report_date = {processDate}
+                        OR
+                        GS.report_date = {processDate}
                 )
                 SELECT
                     P.agent_id,
