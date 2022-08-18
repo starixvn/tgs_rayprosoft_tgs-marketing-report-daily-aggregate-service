@@ -174,6 +174,8 @@ internal class TgsRepository : ITgsRepository
 
     public async ValueTask ProcessAgentDailyMarketingStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default)
     {
+        var queryDate = processDate.AddDays(-1);
+
         var processData = await _context.AgentDailyMarketingStatistics
             .FromSqlInterpolated(
                 @$"
@@ -201,13 +203,13 @@ internal class TgsRepository : ITgsRepository
                             FROM
                                 dbo.player_daily_gaming_statistics
                             WHERE
-                                report_date = {processDate}
+                                report_date = {queryDate}
                         ) AS GS ON RS.player_code = GS.player_code
                             AND RS.report_date = GS.report_date
                     WHERE
-                        RS.report_date = {processDate}
+                        RS.report_date = {queryDate}
                         OR
-                        GS.report_date = {processDate}
+                        GS.report_date = {queryDate}
                 )
                 SELECT
                     P.agent_id,
@@ -230,7 +232,7 @@ internal class TgsRepository : ITgsRepository
             .ConfigureAwait(false);
 
         var existsData = await _context.AgentDailyMarketingStatistics
-            .Where(row => row.ReportDate == processDate)
+            .Where(row => row.ReportDate == queryDate)
             .ToArrayAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -276,15 +278,16 @@ internal class TgsRepository : ITgsRepository
 
     public async ValueTask ProcessPlayerDailyGamingStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default)
     {
+        var queryDate = processDate.AddDays(-1);
         var reportDateTime = new DateTimeOffset(
-            processDate.ToDateTime(TimeOnly.MinValue),
+            queryDate.ToDateTime(TimeOnly.MinValue),
             TimeSpan.FromHours(8D)).ToUniversalTime();
 
         var processData = await _context.PlayerDailyGamingStatistics
             .FromSqlInterpolated(
                 @$"
                 SELECT
-                    {processDate} AS report_date,
+                    {queryDate} AS report_date,
                     PGA.player_code AS player_code,
                     GP.code AS gp_code,
                     G.sub_game_provider_code AS sub_gp_code,
@@ -307,7 +310,7 @@ internal class TgsRepository : ITgsRepository
             .ConfigureAwait(false);
 
         var existsData = await _context.PlayerDailyGamingStatistics
-            .Where(row => row.ReportDate == processDate)
+            .Where(row => row.ReportDate == queryDate)
             .ToArrayAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -352,7 +355,7 @@ internal class TgsRepository : ITgsRepository
 
     public async ValueTask ProcessPlayerDailyRegisterStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default)
     {
-        var (From, To) = (processDate.AddDays(-1), processDate);
+        var (From, To) = (processDate.AddDays(-2), processDate.AddDays(-1));
         var queryTimeRange = (
             From: new DateTimeOffset(
                 From
@@ -370,7 +373,7 @@ internal class TgsRepository : ITgsRepository
                 @$"
                 SELECT
                     P.player_code,
-                    {processDate} AS report_date,
+                    {From} AS report_date,
                     COALESCE(PLR.current_login_count, 0) AS daily_login_count,
                     PIR.record_on AS last_login_on,
                     0 AS total_login_count
@@ -402,7 +405,7 @@ internal class TgsRepository : ITgsRepository
             .ConfigureAwait(false);
 
         var existsData = await _context.PlayerDailyRegisterStatistics
-            .Where(row => row.ReportDate == processDate)
+            .Where(row => row.ReportDate == From)
             .ToArrayAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
