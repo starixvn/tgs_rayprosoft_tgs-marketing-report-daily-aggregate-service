@@ -296,8 +296,6 @@ internal class TgsRepository : ITgsRepository
                         AND PGA.game_id = G.id
                 WHERE
                     PGA.report_date = {reportDateTime}
-                    AND
-                    PGA.agent_id IS NULL
                 GROUP BY
                     PGA.player_code,
                     GP.code,
