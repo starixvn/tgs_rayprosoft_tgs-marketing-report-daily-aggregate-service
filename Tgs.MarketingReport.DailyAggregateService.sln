@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAggregate.Client", "Tgs.MarketingReport.DailyAggregate.Client\Tgs.MarketingReport.DailyAggregate.Client.csproj", "{D69E0736-0D2A-4D36-954B-4C3265E8710E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.MarketingReport.DailyAggregateService.UnitTests", "Tgs.MarketingReport.DailyAggregateService.UnitTests\Tgs.MarketingReport.DailyAggregateService.UnitTests.csproj", "{1FDC20F3-A869-4850-B3A8-2089A96FE0E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.MarketingReport.DailyAggregateService.UnitTests", "Tgs.MarketingReport.DailyAggregateService.UnitTests\Tgs.MarketingReport.DailyAggregateService.UnitTests.csproj", "{1FDC20F3-A869-4850-B3A8-2089A96FE0E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

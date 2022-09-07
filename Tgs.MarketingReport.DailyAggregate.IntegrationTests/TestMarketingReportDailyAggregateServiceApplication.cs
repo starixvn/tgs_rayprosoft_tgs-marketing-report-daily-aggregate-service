@@ -42,7 +42,8 @@ internal class TestMarketingReportDailyAggregateServiceApplication : WebApplicat
                             InMemoryEventId.TransactionIgnoredWarning));
 
                     return new TgsContext(dbContextOptionsBuilder.Options);
-                })));
+                }))
+                .AddFakeNatsMessageQueue());
 
         _webHostConfigure?.Invoke(builder);
     }

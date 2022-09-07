@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace Tgs.MarketingReport.DailyAggregate.Core;
 
@@ -21,17 +15,8 @@ internal class ScheduleTaskBackgroundService : BackgroundService
     {
         _ = stoppingToken.Register(() => _queue.StopProcess());
 
-        return Task.Run(async () =>
-        {
-            while (true)
-            {
-                if (stoppingToken.IsCancellationRequested)
-                    break;
+        _queue.StartProcess(stoppingToken);
 
-                _queue.StartProcess(stoppingToken);
-
-                await Task.Delay(5000, stoppingToken).ConfigureAwait(false);
-            }
-        }, stoppingToken);
+        return Task.CompletedTask;
     }
 }
