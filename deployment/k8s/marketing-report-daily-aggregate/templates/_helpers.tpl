@@ -47,7 +47,7 @@ Selector labels
 */}}
 {{- define "marketing-report-daily-aggregate.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "marketing-report-daily-aggregate.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/instance: RELEASE-NAME
 app: {{ include "marketing-report-daily-aggregate.name" . }}
 tgs.kind: report
 {{- end }}
