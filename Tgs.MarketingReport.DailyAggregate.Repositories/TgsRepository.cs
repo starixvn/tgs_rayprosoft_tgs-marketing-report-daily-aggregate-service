@@ -355,7 +355,7 @@ internal class TgsRepository : ITgsRepository
 
     public async ValueTask ProcessPlayerDailyRegisterStatisticsAsync(DateOnly processDate, CancellationToken cancellationToken = default)
     {
-        var (From, To) = (processDate.AddDays(-2), processDate.AddDays(-1));
+        var (From, To) = (processDate.AddDays(-1), processDate);
         var queryTimeRange = (
             From: new DateTimeOffset(
                 From
