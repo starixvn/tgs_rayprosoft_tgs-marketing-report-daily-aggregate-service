@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JunitXml.TestLogger" Version="3.0.114" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
@@ -28,6 +29,14 @@
     <ProjectReference Include="..\Tgs.MarketingReport.DailyAggregateService\Tgs.MarketingReport.DailyAggregateService.csproj">
       <Aliases>MarketingReportDailAggregateSvc</Aliases>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Users\Phoenix\source\repos\tgs-marketing-report-daily-aggregate-service\Tgs.MarketingReport.DailyAggregate.IntegrationTests\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Users\Phoenix\source\repos\tgs-marketing-report-daily-aggregate-service\Tgs.MarketingReport.DailyAggregate.IntegrationTests\.editorconfig" />
   </ItemGroup>
 
 </Project>
