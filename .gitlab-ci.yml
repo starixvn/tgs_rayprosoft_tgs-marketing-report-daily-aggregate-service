@@ -3,7 +3,7 @@ variables:
   ImageName: pgtgs/marketing-report-daily-aggregate
   TgsSettingKey: marketing-report-daily-aggregate
   BuildCacheKey: Tgs.marketing-report-daily-aggregate.$CI_PIPELINE_IID
-  
+  HelmTemplateFolderName: marketing-report-daily-aggregate
 
 default:
   before_script:
@@ -93,12 +93,12 @@ push-k8s-template:
     - main
   script:
     - mkdir -p artifacts/k8s
-    - cp -R deployment/k8s/marketing-report-daily-aggregate artifacts/k8s/
+    - cp -R deployment/k8s/$HelmTemplateFolderName artifacts/k8s/
     - |
       yq -i e '
         .image.repository = strenv(ImageName) |
         .image.tag = strenv(Tag)
-      ' artifacts/k8s/payment-api/values.yaml
+      ' artifacts/k8s/$HelmTemplateFolderName/values.yaml
     - cp deployment/k8s/cronjob.yaml artifacts/k8s/
   artifacts:
     name: HelmTemplate
@@ -128,7 +128,7 @@ deploy-dev:
     - export dedicated=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated})
     - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.node-selector})
     - |
-      cat << EOF | yq e -P | helm template artifacts/k8s/payment-api \
+      cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
         -n $namespace \
         -f - 
       {
@@ -138,7 +138,7 @@ deploy-dev:
       }
       EOF
     - |
-      cat << EOF | yq e -P | helm template artifacts/k8s/payment-api \
+      cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
         -n $namespace \
         -f - \
         | kubectl -n $namespace apply -f -
@@ -171,7 +171,7 @@ deploy-staging:
     - export dedicated=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated})
     - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.node-selector})
     - |
-      cat << EOF | yq e -P | helm template artifacts/k8s/payment-api \
+      cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
         -n $namespace \
         -f - 
       {
@@ -181,7 +181,7 @@ deploy-staging:
       }
       EOF
     - |
-      cat << EOF | yq e -P | helm template artifacts/k8s/payment-api \
+      cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
         -n $namespace \
         -f - \
         | kubectl -n $namespace apply -f -
@@ -214,7 +214,7 @@ deploy-prod:
     - export dedicated=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated})
     - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.node-selector})
     - |
-      cat << EOF | yq e -P | helm template artifacts/k8s/payment-api \
+      cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
         -n $namespace \
         -f - 
       {
@@ -224,7 +224,7 @@ deploy-prod:
       }
       EOF
     - |
-      cat << EOF | yq e -P | helm template artifacts/k8s/payment-api \
+      cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
         -n $namespace \
         -f - \
         | kubectl -n $namespace apply -f -
