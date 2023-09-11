@@ -1,4 +1,4 @@
-using Hangfire;
+﻿using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -44,7 +44,8 @@ builder.Services
         })
         .AddReplyHandler<PlayerDailyGamingHandler>("tgs.gaming.background.player", "tgs.gaming.background.player")
         .AddReplyHandler<PlayerDailyRegisterHandler>("tgs.register.background.player", "tgs.register.background.player")
-        .AddReplyHandler<AgentDailyMarketingHandler>("tgs.marketing.background.agent", "tgs.marketing.background.agent"))
+        .AddReplyHandler<AgentDailyMarketingHandler>("tgs.marketing.background.agent", "tgs.marketing.background.agent")
+        .AddReplyHandler<BrandDailyMarketingHandler>("tgs.marketing.background.brand", "tgs.marketing.background.brand"))
     .AddNatsGlobPatternExchange("*");
 
 builder.Services
