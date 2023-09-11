@@ -57,8 +57,8 @@ internal class TgsRepository : ITgsRepository
                         dbo.players
                     WHERE
                         agent_id IS NOT NULL
-                        and first_deposit_on >= :start_time
-                        and first_deposit_on < :end_time
+                        AND first_deposit_on >= :start_time
+                        AND first_deposit_on < :end_time
                     GROUP BY
                         agent_id,
                         (first_deposit_on at time zone 'Asia/Shanghai')::date
@@ -76,9 +76,9 @@ internal class TgsRepository : ITgsRepository
                         FROM report.player_aggregates ra
                         WHERE
                             agent_id IS NOT NULL
-                            and report_date >= :start_time
-                            and report_date < :end_time
-                            and bet_amount > 0
+                            AND report_date >= :start_time
+                            AND report_date < :end_time
+                            AND bet_amount > 0
                     ) g
                     GROUP BY g.agent_id, g.report_date
                 )
@@ -233,11 +233,11 @@ internal class TgsRepository : ITgsRepository
                     P.agent_id,
                     P.brand_id,
                     S.report_date,
-                    Count(1) filter ( where S.is_gaming = true ) AS gaming_count,
-                    Count(1) filter ( where S.is_register = true ) AS register_count
+                    Count(1) filter ( WHERE S.is_gaming = true ) AS gaming_count,
+                    Count(1) filter ( WHERE S.is_register = true ) AS register_count
                 FROM
                     statistics AS S
-                    join
+                    JOIN
                     dbo.players AS P ON S.player_code = P.player_code
                 WHERE
                     P.agent_id IS NOT NULL
@@ -335,13 +335,13 @@ internal class TgsRepository : ITgsRepository
                 SELECT
                     P.brand_id,
                     S.report_date,
-                    Count(1) filter ( where S.is_gaming = true and P.agent_id is null ) AS directly_player_gaming_count,
-                    Count(1) filter ( where S.is_register = true and P.agent_id is null ) AS directly_player_register_count,
-                    Count(1) filter ( where S.is_gaming = true ) AS total_player_gaming_count,
-                    Count(1) filter ( where S.is_register = true ) AS total_player_register_count
+                    Count(1) filter ( WHERE S.is_gaming = true AND P.agent_id is null ) AS directly_player_gaming_count,
+                    Count(1) filter ( WHERE S.is_register = true AND P.agent_id is null ) AS directly_player_register_count,
+                    Count(1) filter ( WHERE S.is_gaming = true ) AS total_player_gaming_count,
+                    Count(1) filter ( WHERE S.is_register = true ) AS total_player_register_count
                 FROM
                     statistics AS S
-                    join
+                    JOIN
                     dbo.players AS P ON S.player_code = P.player_code
                 GROUP BY
                     P.brand_id,
