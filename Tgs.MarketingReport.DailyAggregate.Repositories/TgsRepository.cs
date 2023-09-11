@@ -299,8 +299,7 @@ internal class TgsRepository : ITgsRepository
         var queryDate = processDate.AddDays(-1);
 
         var processData = await _context.BrandDailyMarketingStatistics
-            .FromSqlInterpolated(
-                @$"
+            .FromSqlInterpolated($"""
                 WITH statistics
                 AS
                 (
@@ -339,14 +338,15 @@ internal class TgsRepository : ITgsRepository
                     Count(1) filter ( where S.is_gaming = true and P.agent_id is null ) AS directly_player_gaming_count,
                     Count(1) filter ( where S.is_register = true and P.agent_id is null ) AS directly_player_register_count,
                     Count(1) filter ( where S.is_gaming = true ) AS total_player_gaming_count,
-					Count(1) filter ( where S.is_register = true ) AS total_player_register_count
+                    Count(1) filter ( where S.is_register = true ) AS total_player_register_count
                 FROM
                     statistics AS S
                     join
                     dbo.players AS P ON S.player_code = P.player_code
                 GROUP BY
                     P.brand_id,
-                    S.report_date")
+                    S.report_date
+                """)
             .AsNoTracking()
             .ToArrayAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
