@@ -16,6 +16,14 @@ public class ScheduleController : ControllerBase
             processDate,
             "tgs.marketing.background.agent"));
 
+    [HttpPost("marketing/brand/{processDate}", Name = "QueueProcessBrandMarketingStatisticsWithProcessDate")]
+    [SuccessStatusCode(202)]
+    public void QueueProcessBrandMarketingStatisticsWithProcessDate(
+        DateOnly processDate)
+        => BackgroundJob.Enqueue<ScheduleBackgroundJob>(job => job.ExecuteAsync(
+            processDate,
+            "tgs.marketing.background.brand"));
+
     [HttpPost("marketing", Name = "QueueProcessMarketingStatisticsJobs")]
     public void QueueProcessMarketingStatisticsJobs()
     {
@@ -25,7 +33,8 @@ public class ScheduleController : ControllerBase
 
         _ = BackgroundJob.Enqueue<ScheduleBackgroundJob>(job => job.ExecuteAsync(
             currentDate,
-            "tgs.marketing.background.agent"));
+            "tgs.marketing.background.agent",
+            "tgs.marketing.background.brand"));
     }
 
     [HttpPost("gaming/player/{processDate}", Name = "QueueProcessPlayerGamingStatisticsWithProcessDate")]

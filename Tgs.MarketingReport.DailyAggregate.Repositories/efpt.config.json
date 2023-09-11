@@ -1,62 +1,64 @@
 ﻿{
-   "CodeGenerationMode": 2,
-   "ContextClassName": "TgsContext",
-   "ContextNamespace": "Entities",
-   "DefaultDacpacSchema": null,
-   "FilterSchemas": true,
-   "IncludeConnectionString": false,
-   "ModelNamespace": "Entities",
-   "OutputContextPath": "Entities",
-   "OutputPath": "Entities\\Models",
-   "ProjectRootNamespace": "Tgs.MarketingReport.DailyAggregate.Repositories",
-   "Schemas": [
-      {
-         "Name": "dbo"
-      },
-      {
-         "Name": "report"
-      }
-   ],
-   "SelectedHandlebarsLanguage": 0,
-   "SelectedToBeGenerated": 0,
-   "Tables": [
-      {
-         "Name": "dbo.player_daily_gaming_statistics",
-         "ObjectType": 0
-      },
-      {
-         "Name": "dbo.player_daily_register_statistics",
-         "ObjectType": 0
-      },
-      {
-         "Name": "dbo.marketing_statistics_settings",
-         "ObjectType": 0
-      },
-      {
-         "Name": "dbo.agent_daily_marketing_statistics",
-         "ObjectType": 0
-      },
-      {
-         "Name": "report.marketing_report_daily_aggregates",
-         "ObjectType": 0
-      }
-   ],
-   "UiHint": "tgs-local",
-   "UseBoolPropertiesWithoutDefaultSql": false,
-   "UseDatabaseNames": false,
-   "UseDbContextSplitting": true,
-   "UseFluentApiOnly": true,
-   "UseHandleBars": false,
-   "UseHierarchyId": false,
-   "UseInflector": true,
-   "UseLegacyPluralizer": false,
-   "UseManyToManyEntity": true,
-   "UseNoConstructor": false,
-   "UseNoDefaultConstructor": false,
-   "UseNoNavigations": false,
-   "UseNoObjectFilter": false,
-   "UseNodaTime": false,
-   "UseNullableReferences": true,
-   "UseSchemaFolders": false,
-   "UseSpatial": false
+  "CodeGenerationMode": 2,
+  "ContextClassName": "TgsContext",
+  "ContextNamespace": "Entities",
+  "DefaultDacpacSchema": null,
+  "FilterSchemas": true,
+  "IncludeConnectionString": false,
+  "ModelNamespace": "Entities",
+  "OutputContextPath": "Entities",
+  "OutputPath": "Entities\\Models",
+  "ProjectRootNamespace": "Tgs.MarketingReport.DailyAggregate.Repositories",
+  "Schemas": [
+    {
+      "Name": "dbo"
+    },
+    {
+      "Name": "report"
+    }
+  ],
+  "SelectedHandlebarsLanguage": 0,
+  "SelectedToBeGenerated": 0,
+  "Tables": [
+    {
+      "Name": "dbo.agent_daily_marketing_statistics",
+      "ObjectType": 0
+    },
+    {
+      "Name": "dbo.brand_daily_marketing_statistics",
+      "ObjectType": 0
+    },
+    {
+      "Name": "dbo.marketing_statistics_settings",
+      "ObjectType": 0
+    },
+    {
+      "Name": "dbo.player_daily_gaming_statistics",
+      "ObjectType": 0
+    },
+    {
+      "Name": "dbo.player_daily_register_statistics",
+      "ObjectType": 0
+    },
+    {
+      "Name": "report.marketing_report_daily_aggregates",
+      "ObjectType": 0
+    }
+  ],
+  "UiHint": "tgs-local",  
+  "UseBoolPropertiesWithoutDefaultSql": false,
+  "UseDatabaseNames": false,  
+  "UseDbContextSplitting": true,
+  "UseFluentApiOnly": true,
+  "UseHandleBars": false,
+  "UseHierarchyId": false,
+  "UseInflector": true,
+  "UseLegacyPluralizer": false,
+  "UseManyToManyEntity": true,
+  "UseNoDefaultConstructor": false,
+  "UseNoObjectFilter": false,
+  "UseNodaTime": false,
+  "UseNullableReferences": true,
+  "UseSchemaFolders": false,  
+  "UseSpatial": false  
 }
