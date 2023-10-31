@@ -1,6 +1,6 @@
 ﻿using Tgs.MarketingReport.DailyAggregate.Core;
 using Tgs.MarketingReport.DailyAggregateService.Protos;
-using Tgs.MessageQueue;
+using Valhalla.MessageQueue;
 
 namespace Tgs.MarketingReport.DailyAggregateService.MessageQueue;
 

@@ -1,9 +1,9 @@
-﻿using Hangfire;
+﻿using FluentdForward.OpenTelemetry.MessagePack;
+using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Instrumentation.AspNetCore;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Tgs.MarketingReport.DailyAggregateService;
@@ -22,9 +22,14 @@ builder.Logging
         _ = options.AddFluentdForwardExporter(fluentOptions =>
         {
             var nodeIp = builder.Configuration.GetValue<string>("NODE_IP");
-            fluentOptions.Host = nodeIp;
-            fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME");
-            fluentOptions.UseMessagePack();
+            fluentOptions.Host = nodeIp!;
+            fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
+            fluentOptions.UseMessagePack(LogRecordFormatterResolver.GetResolverInstanceWithExtendInfo(
+                "MachineInfo",
+                () => new
+                {
+                    Environment.MachineName
+                }));
         });
     });
 
@@ -40,7 +45,7 @@ builder.Services
         {
             var config = sp.GetRequiredService<IConfiguration>();
 
-            options.Url = config.GetConnectionString("Nats");
+            options.Url = config.GetConnectionString("Nats")!;
         })
         .AddReplyHandler<PlayerDailyGamingHandler>("tgs.gaming.background.player", "tgs.gaming.background.player")
         .AddReplyHandler<PlayerDailyRegisterHandler>("tgs.register.background.player", "tgs.register.background.player")
@@ -56,31 +61,28 @@ builder.Services
 
 builder.Services
     .AddRouting(options => options.LowercaseUrls = true)
-    .AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
-    .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
+    .AddControllers();
 
 builder.Services
-    .AddSingleton<IConfigureOptions<OtlpExporterOptions>>(
-        sp => new ConfigureNamedOptions<OtlpExporterOptions>(
-            Options.DefaultName,
-            exporterOptions =>
-            {
-                var config = sp.GetRequiredService<IConfiguration>();
-                var nodeIp = config.GetValue<string>("NODE_IP");
-
-                if (!string.IsNullOrWhiteSpace(nodeIp))
-                    exporterOptions.Endpoint = new Uri($"http://{nodeIp}:4317");
-
-                config.GetSection("Opentelemetry:Tracing").Bind(exporterOptions);
-            }))
-    .AddOpenTelemetryTracing(traceBuilder => traceBuilder
-        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddEnvironmentVariableDetector())
+    .AddOpenTelemetry()
+    .WithTracing(traceBuilder => traceBuilder
+        .SetResourceBuilder(ResourceBuilder.CreateDefault()
+            .AddEnvironmentVariableDetector())
         .AddSource("Tgs.*")
         .AddSource("TGS.*")
+        .AddSource("Valhalla.*")
         .AddAspNetCoreInstrumentation()
         .AddHttpClientInstrumentation()
         .AddProfileViewExporter()
         .AddOtlpExporter())
+    .WithMetrics(meterBuilder => meterBuilder
+        .SetResourceBuilder(ResourceBuilder.CreateDefault()
+            .AddEnvironmentVariableDetector())
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation()
+        .AddOtlpExporter())
+    .Services
     .AddProfileViewer()
     .Configure<AspNetCoreInstrumentationOptions>(options =>
     {
@@ -95,7 +97,7 @@ builder.Services
         };
     });
 
-builder.Services.AddSwaggerGen(c => c.UseDateOnlyTimeOnlyStringConverters());
+builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddHealthChecks();
