@@ -190,3 +190,5 @@ $RECYCLE.BIN/
 
 # python
 **/__pycache__
+
+.cr

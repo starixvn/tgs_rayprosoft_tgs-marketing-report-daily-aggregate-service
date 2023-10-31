@@ -1,16 +1,19 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: marketing-background-scheduler
+  name: {{ include "marketing-report-daily-aggregate.fullname" . }}-scheduler
 spec:
-  schedule: "0 21 * * *"
+  schedule: {{ .Values.cronjob.schedule }}
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: marketing-background-job
-            image: alpine/curl:3.14
+            image: alpine/curl:8.4.0
             imagePullPolicy: IfNotPresent
             command:
             - curl

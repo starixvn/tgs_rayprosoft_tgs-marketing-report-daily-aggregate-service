@@ -5,7 +5,7 @@ using MarketingReportDailAggregateSvc::Tgs.MarketingReport.DailyAggregateService
 using MarketingReportDailAggregateSvc::Tgs.MarketingReport.DailyAggregateService.Protos;
 using NSubstitute;
 using Tgs.MarketingReport.DailyAggregate.Core;
-using Tgs.MessageQueue;
+using Valhalla.MessageQueue;
 
 namespace Tgs.MarketingReport.DailyAggregate.IntegrationTests;
 
