@@ -56,6 +56,7 @@ deploy-dev:
       artifacts: true
   only:
     - main
+  when: on_success
   script:
     - deploy_k8s $TgsSettingKey $HelmTemplateFolderName $namespace
 
